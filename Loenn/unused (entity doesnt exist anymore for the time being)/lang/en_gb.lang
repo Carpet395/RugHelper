@@ -1,0 +1,8 @@
+ui.menubar.leppa_rug_meta=Rug Metadata
+
+ui.leppa.RugMeta.title=AltSidesHelper Metadata
+ui.leppa.RugMeta.group.meta.name=Meta
+ui.leppa.RugMeta.group.overworld.name=Overworld
+ui.leppa.RugMeta.group.inGame.name=In-game
+ui.leppa.RugMeta.group.fullClear.name=Full clear
+ui.leppa.RugMeta.group.experimental.name=Experimental

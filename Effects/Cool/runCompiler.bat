@@ -1,0 +1,1 @@
+C:\Users\USER\Downloads\CelesteShaderCompiler1.0.1\CelesteShaderCompiler.exe

@@ -1,0 +1,18 @@
+# Colorful badeline
+entities.Partline/UBadelineDummy.placements.name.normal=Colorful Badeline
+entities.Partline/UBadelineDummy.attributes.description.variant=Which Variant should the badeline be
+entities.Partline/UBadelineDummy.attributes.description.left=Determines wether should the badeline face left
+entities.Partline/UBadelineDummy.attributes.description.floating=When Animation parameter is empty it will determine if the badeline will play a floating sprite or a stading sprite
+entities.Partline/UBadelineDummy.attributes.description.animation=Custom animation for the badeline to be at
+entities.Partline/UBadelineDummy.attributes.description.flag=The Flag for the badeline to activate
+entities.Partline/UBadelineDummy.attributes.description.ifset=Wether badeline should activate when the flag is false or true
+entities.Partline/UBadelineDummy.attributes.description.render=Should the badeline render during screen transitions? (if the flag tells badeline to deactivate the badeline is still visible until the screen transition is over)
+
+# limbo theo
+entities.Rug/TheoWOWOWOWOWOWOWOWOWOWOWOWOWFuckHimPutHimIntoLimbo.attributes.description.texture=The texture of the crystal (xml).
+
+# ShaderOverrider
+entities.Rug/ShaderOverrider.attributes.description.multiples=Wether the overrider should override all enities on the node or only the first one
+
+# colorgrade thing
+style.effects.Rug/ColorgradeStyleground.name=Colorgrade

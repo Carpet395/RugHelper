@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Sprites>
+ <whiteBadeline path="characters/whiteBadeline/" start="idle">
+  <Justify x=".5" y="1" />
+    <Anim id="soul" path="soul" delay="0" frames="0"/>
+
+    <Loop id="idle" path="idle" delay="0.1" />
+    <Loop id="idleA" path="idle" delay="0.1" />
+    <Loop id="idleB" path="idle" delay="0.1" />
+    <Loop id="idleC" path="idle" delay="0.1" />
+    <Anim id="lookUp" path="lookUp" delay="0.1" />
+    <Loop id="walk" path="walk" delay="0.06" />
+    <Loop id="push" path="push" delay="0.1" />
+    <Anim id="runSlow" path="runSlow" delay="0.07" goto="runFast" />
+    <Loop id="runFast" path="runFast" delay="0.05" />
+    <Anim id="runStumble" path="runStumble" delay="0.05" frames="10-11,0-11" goto="runFast"/>
+    <Loop id="dash" path="dash" delay="0.06" />
+    <Anim id="dreamDashIn" path="dreamDash" frames="0-3" delay="0.04" goto="dreamDashLoop"/>
+    <Loop id="dreamDashLoop" path="dreamDash" frames="4-16" delay="0.03" />
+    <Anim id="dreamDashOut" path="dreamDash" frames="17-20" delay="0.04" />
+    <Loop id="slide" path="slide" delay="0.03" />
+    <Loop id="jumpSlow" path="jumpSlow" delay="0.1" frames="0,1" />
+    <Loop id="jumpFast" path="jumpFast" delay="0.1" frames="0,1" />
+    <Anim id="fallSlow" path="jumpSlow" delay="0.1" frames="2,3" />
+    <Anim id="fallFast" path="jumpFast" delay="0.1" frames="2,3" />
+    <Loop id="tired" path="tired" delay="0.18" />
+    <Loop id="wallslide" path="climb" frames="0" />
+    <Anim id="climbLookBackStart" path="climb" delay="0.08" frames="6,7,8" goto="climbLookBack" />
+    <Loop id="climbLookBack" path="climb" frames="8" />
+    <Loop id="climbup" path="climb" delay="0.04" frames="0-5" />
+    <Loop id="duck" path="duck" delay="0" frames="0" />
+    <Loop id="edge" path="edge" delay="0.25" frames="0-13" />
+    <Anim id="sleep" path="sleep" delay="0.1" frames="0-10,10*5,11-23" />
+    <Anim id="faint" path="faint" delay="0.1" frames="0-10" goto="fainted" />
+    <Loop id="fainted" path="faint" delay="0.1" frames="10" />
+    <Anim id="flip" path="flip" delay="0.04" frames="0-7" goto="runFast"/>
+    <Loop id="skid" path="flip" delay="0.04" frames="8"/>
+    <Loop id="dangling" path="dangling" delay="0.11" frames="0-9" />
+    <Anim id="spawn" path="spawn" delay="0.08" frames="0*3,0-9" goto="fallSlow"/>
+    <Loop id="laugh" path="laugh" delay="0.04" />
+    <Loop id="angry" path="angry" delay="0.04" />
+    <Anim id="boost" path="boost" delay="0.05"/>
+
+    <Loop id="pretendDead" path="sleep" delay="0" frames="23" />
+    <Loop id="spin" path="spin" delay="0.1" />
+    <Loop id="hug" path="hug" delay="0.08"/>
+    
+    <Metadata>
+      <Frames path="idle" hair="0,-2|0,-2|0,-2|0,-2|0,-1|0,-1|0,-1|0,-1|0,-1"/>
+      <Frames path="lookUp" hair="0,-2|0,-2|0,-2|0,-2|-1,-1:1|-1,-2:1|-1,-2:1|-1,-2:1|-1,-3:1"/>
+      <Frames path="edge" hair="-1,-2|-1,-2|-1,-2|-1,-1|-1,-1|-1,-1|-1,-2|0,-2|1,-2|0,-2|0,-1|-1,-1|-1,-1|-1,-2"/>
+      <Frames path="walk" hair="0,-2|0,-1|0,-1|0,-1|0,-3|0,-2|0,-1|0,-1|0,-1|0,-1|0,-3|0,-2"/>
+      <Frames path="push" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-3|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2|1,-2|1,-2"/>
+      <Frames path="runSlow" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+      <Frames path="runFast" hair="1,-2|1,-1|1,-1|1,-1|1,-3|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+      <Frames path="runStumble" hair="1, 1|1,2|1,2|1,0|1,-2|1,-2|1,-1|1,-1|1,-1|1,-1|1,-3|1,-2"/>
+      <Frames path="dash" hair="2,0|2,0|2,0|2,1"/>
+      <Frames path="dreamDash" hair="2,0|1,0|0,0|0,0|1,1|2,1|2,1|2,0|1,0|1,0|1,0|1,0|1,0|1,0|1,0|1,0|1,0|0,0|1,0|1,0|2,1"/>
+      <Frames path="slide" hair="0,3|0,3|0,3"/>
+      <Frames path="jumpSlow" hair="1,-3|1,-3|1,-2|0,-2"/>
+      <Frames path="jumpFast" hair="1,-3|1,-3|1,-2|0,-2"/>
+      <Frames path="tired" hair="0,1|0,2|0,1|0,0"/>
+      <Frames path="climb" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|0,-1|1,-2:1|2,-2:2"/>
+      <Frames path="duck" hair="0,3"/>
+      <Frames path="sleep" hair=""/>
+      <Frames path="flip" hair="-1,-1:2|-1,-1:1|0,-1:1|1,-1:0|1,-1:0|1,0:0|2,0:0|2,0:0|2,0:0"/>
+      <Frames path="dangling" hair="0,-2|0,-2|0,-2|0,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2|-1,-2"/>
+      <Frames path="faint" hair="0,1|0,1|0,1|0,1|1,1|2,1|2,2|5,5|6,8|6,7"/>
+      <Frames path="fainted" hair="6,7"/>
+      <Frames path="spawn" hair="x|x|x|x|x|x|x|x|1,-6|1,-6|1,-5|1,-5|1,-4|1,-4|1,-3|1,-3|0,-2"/>
+      <Frames path="laugh" hair="0,-3|0,-3|0,-3|0,-2|0,-2|0,-2"/>
+      <Frames path="angry" hair="-1,-3|-1,-3|-1,-3|-1,-2|-1,-2|-1,-2"/>
+      <Frames path="boost" hair="0,-2|0,-2|0,-2|0,-2|0,0|0,-6|0,-3|0,-1|0,-1|0,-2"/>
+      <Frames path="hug" hair="0,2"/>
+    </Metadata>
+  </whiteBadeline>
+  <Wbadeline_boss path="characters/whiteBadelineBoss/" start="idle">
+    <Justify x="0.5" y=".64" />
+    <Loop id="idle" path="boss" delay="0.06" frames="0-23"/>
+    
+    <Loop id="scaredIdle" path="scared" delay="0.06" frames="0-19"/>
+    <Anim id="scaredTransition" path="scared" delay="0.1" frames="20-29" goto="calm"/>
+    <Loop id="calm" path="scared" delay="0.06" frames="30"/>
+    <Anim id="lookUp" path="scared" delay="0.08" frames="30-30" goto="lookingUp"/>
+    <Loop id="lookingUp" path="scared" delay="0.08" frames="35"/>
+    
+    <Anim id="attack1Begin" path="boss" delay="0.06" frames="24-29" goto="attack1Loop"/>
+    <Anim id="attack1Loop" path="boss" delay="0.06" frames="30-36" goto="attack1Loop"/>
+    <Anim id="attack1Recoil" path="boss" delay="0.06" frames="40-45" goto="idle"/>
+
+    <Anim id="attack2Begin" path="charge" delay="0.06" frames="0-17" goto="attack2Aim"/>
+    <Anim id="attack2Aim" path="charge" delay="0.06" frames="18-28" goto="attack2Aim"/>
+    <Anim id="attack2Lock" path="charge" delay="0.06" frames="29-39" goto="attack2Lock"/>
+    <Anim id="attack2Recoil" path="charge" delay="0.06" frames="40-45" goto="idle"/>
+   
+    <Anim id="getHit" path="hit" delay="0.06" frames="0-9" goto="star"/>
+    <Loop id="star" path="hit" delay="0.06" frames="10-15"/>
+    <Anim id="recoverHit" path="hit" delay="0.06" frames="16-19" goto="idle"/>
+  </Wbadeline_boss>
+
+  <Wadeline_projectile path="characters/whiteBadelineBoss/" start="charge">
+    <Justify x=".5" y=".5" />
+    <Anim id="charge" path="projectile" delay="0.06" frames="0-3"  goto="loop"/>
+    <Loop id="loop" path="projectile" delay="0.06" frames="4-12"/>
+  </Wadeline_projectile>
+  <Wbadeline_beam path="characters/whiteBadelineBoss/" start="charge">
+    <Justify x="0" y=".5" />
+    <Loop id="charge" path="beam" delay="0.06" frames="0-13"/>
+    <Anim id="lock" path="beam" delay="0.03" frames="14-25"/>
+    <Anim id="shoot" path="beam" delay="0.04" frames="26-36"/>
+  </Wbadeline_beam>
+
+  <Wbadeline_beam_start path="characters/whiteBadelineBoss/" start="shoot">
+    <Justify x="0" y=".5" />
+    <Anim id="shoot" path="beamStart" delay="0.06"/>
+  </Wbadeline_beam_start>
+</Sprites>

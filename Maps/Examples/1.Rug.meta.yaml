@@ -1,0 +1,18 @@
+Title:
+  Effect: Cool/Em4
+  Parameters:
+  - paramName: speedMult
+    paramType: float
+    paramValue: 5.0
+  - paramName: sizeMult
+    paramType: float
+    paramValue: 1
+TitleAccent:
+  Effect: Cool/Em4
+  Parameters:
+  - paramName: speedMult
+    paramType: float
+    paramValue: -2
+  - paramName: sizeMult
+    paramType: float
+    paramValue: 2
