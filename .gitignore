@@ -18,6 +18,9 @@ mono_crash.*
 
 *.py
 *.bat
+*.zip
+
+
 
 # Build results
 [Dd]ebug/
