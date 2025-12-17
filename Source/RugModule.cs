@@ -31,6 +31,7 @@ using static Celeste.Level;
 using Celeste.Mod.Rug.Entities;
 using IL.MonoMod;
 using Celeste.Mod.Entities;
+using FrostHelper;
 //using Celeste.Mod.Meta;
 //using FrostHelper.ShaderImplementations;
 //using FrostHelper.ModIntegration;
@@ -45,6 +46,15 @@ namespace Celeste.Mod.Rug;
 public class RugHelperModule : EverestModule {
     // Only one alive module instance can exist at any given time.
     public static RugHelperModule Instance;
+
+    public static readonly FrameworkType Framework;
+
+    static RugHelperModule()
+    {
+        Framework = typeof(Game).Assembly.FullName!.Contains("FNA")
+            ? FrameworkType.FNA
+            : FrameworkType.XNA;
+    }
 
     public RugHelperModule()
     {
@@ -432,7 +442,7 @@ public class RugHelperModule : EverestModule {
 
         parameters["DeltaTime"]?.SetValue(Engine.DeltaTime);
         parameters["Time"]?.SetValue(Engine.Scene.TimeActive);
-        parameters["Dimensions"]?.SetValue(new Vector2(1920, 1080));
+        parameters["Dimensions"]?.SetValue(new Vector2(1920, 1920));
         parameters["CamPos"]?.SetValue(self.Overworld.Mountain.Camera.Position);
         parameters["ColdCoreMode"]?.SetValue(true);
 
@@ -440,13 +450,15 @@ public class RugHelperModule : EverestModule {
         Viewport viewport = Engine.Graphics.GraphicsDevice.Viewport;
 
         Matrix projection = Matrix.CreateOrthographicOffCenter(0, viewport.Width, viewport.Height, 0, 0, 1);
-        
-        Matrix halfPixelOffset = Matrix.CreateTranslation(-0.5f, -0.5f, 0f);
+
+        Matrix halfPixelOffset = Framework is FrameworkType.FNA
+            ? Matrix.Identity
+            : Matrix.CreateTranslation(-0.5f, -0.5f, 0f);
 
         parameters["TransformMatrix"]?.SetValue(halfPixelOffset * projection);
 
         parameters["ViewMatrix"]?.SetValue(camera ?? Matrix.Identity);
-        //parameters["Photosensitive"]?.SetValue(Settings.Instance.DisableFlashes);
+        parameters["Photosensitive"]?.SetValue(Settings.Instance.DisableFlashes);
 
         return effect;
     }
@@ -533,7 +545,7 @@ public class RugHelperModule : EverestModule {
                     }
 
                     Draw.SpriteBatch.End();
-                    Draw.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.LinearClamp, DepthStencilState.Default, RasterizerState.CullNone, effect, transformMatrix);
+                    Draw.SpriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.Default, RasterizerState.CullNone, effect, transformMatrix);
                     //Logger.Log(LogLevel.Info, "meow", "meow");
                     //Draw.SpriteBatch.Draw(titleTex.Texture.Texture_Safe, dstRect, Color.White); //self.Position + new Vector2(_FixTitleLength(-60f, self), 0f), Vector2.Zero, self.Data.TitleBaseColor);
                     titleTex.Draw(self.Position + new Vector2(_FixTitleLength(-60f, self), 0f), Vector2.Zero, self.Data.TitleBaseColor);

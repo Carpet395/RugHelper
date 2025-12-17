@@ -48,10 +48,10 @@ float4 SpritePixelShader(float2 uv : TEXCOORD0) : COLOR0
     float2 worldPos = uv * Dimensions + CamPos;
     float4 baseColor = SAMPLE_TEXTURE(text, uv);
     float4 color = float4(0,0,0,1);
-    float aspect = 4;
+    //float aspect = 4;
     for(int i=0;i<STAR_COUNT;i++)
     {
-        float2 starSeed = float2(i, i*7.0);
+        float2 starSeed = float2(i, i);
 
         float2 starNorm = float2(rand(starSeed), rand(starSeed.yx));
 
@@ -66,10 +66,10 @@ float4 SpritePixelShader(float2 uv : TEXCOORD0) : COLOR0
 
         starPos = fmod(starPos, Dimensions); 
 
-        float radius = (2.5 + rand(starSeed.xy)*2.5) * sizeMult;
+        float radius = (2.5 + rand(starSeed.xy)) * sizeMult;
 
         float2 diff = worldPos - starPos;
-        diff.x *= aspect;
+        //diff.x *= aspect;
 
         float d = length(diff);
 
