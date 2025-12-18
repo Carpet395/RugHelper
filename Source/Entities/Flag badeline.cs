@@ -7,6 +7,7 @@ using Monocle;
 namespace Celeste.Mod.Rug.Entities;
 
 [CustomEntity("Rug/FlagBadeline")]
+[Tracked()]
 public class FlagBadeline : FinalBoss
 {
 

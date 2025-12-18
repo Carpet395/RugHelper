@@ -25,7 +25,7 @@ public class NewAppearingBlock : Solid
     // -- idk how tf does it work but i know it does so yeppe!! -- //
 
     // tile sprites
-    public TileGrid sprite;
+    //public TileGrid sprite;
     //public TileGrid highlight;
 
     // nodex
@@ -94,6 +94,16 @@ public class NewAppearingBlock : Solid
 
     public int Lastcount = 0;
 
+    public override void DebugRender(Camera camera)
+    {
+        base.DebugRender(camera);
+
+        if (Collider != null)
+        {
+            Collider.Render(camera, TrueMasterOfGroup ? Collidable ? Color.Cyan : Color.DarkCyan : MasterOfGroup ? Collidable ? Color.Gold : Color.DarkGoldenrod : Collidable ? Color.Red : Color.DarkRed);
+        }
+    }
+
     public override void Update()
     {
         //if ()
@@ -101,13 +111,146 @@ public class NewAppearingBlock : Solid
         //if (nodes != Lastcount) Rebuild(); //JustRebuilt = false;
         //Lastcount = nodes;
         //if ((BlockedCheck<FinalBoss>(true) && !onNode))
-            //Add(new Coroutine(waitForClear(onNode && hm)));
+        //Add(new Coroutine(waitForClear(onNode && hm)));
         //else if (sprite != null && DisappearMode && ((BlockedCheck<FinalBoss>(true) && !onNode) || (onNode && hm)))
-            //Add(new Coroutine(waitForDie(onNode && hm)));
-        if (sprite != null)
+        //Add(new Coroutine(waitForDie(onNode && hm)));
+        if (MasterOfGroup)
+        {
+            if (onNode)
+            {
+                if (GetNodeMatch(count, out int nodes) && Lastcount != nodes)
+                {
+                    if (DisappearMode)
+                    {
+                        if (tiles != null) tiles.RemoveSelf();
+                        foreach (NewAppearingBlock item in group)
+                        {
+                            item.Collidable = false;
+                        }
+                    }
+                    else if (!DisappearMode)
+                    {
+                        GroupBoundsMin = new Point((int)base.X, (int)base.Y);
+                        GroupBoundsMax = new Point((int)base.Right, (int)base.Bottom);
+                        if (nodes == count)
+                        {
+                            //if (tiles != null) tiles.RemoveSelf();
+                            Actualgroup = new List<List<NewAppearingBlock>>();
+                            FindInGroupDiffrent(this, this);
+                        }
+                        foreach (List<NewAppearingBlock> agroup in Actualgroup)
+                        {
+                            foreach (NewAppearingBlock i in agroup)
+                            {
+                                if (i.Y < GroupBoundsMin.Y) GroupBoundsMin.Y = (int)i.Y;
+                                if (i.X < GroupBoundsMin.X) GroupBoundsMin.X = (int)i.X;
+                                if (i.X + i.Width > GroupBoundsMax.X) GroupBoundsMax.X = (int)(i.X + i.Width);
+                                if (i.Y + i.Height > GroupBoundsMax.Y) GroupBoundsMax.Y = (int)(i.Y + i.Height);
+                            }
+                        }
+                        Rectangle rectangle = new Rectangle(GroupBoundsMin.X / 8, GroupBoundsMin.Y / 8, (GroupBoundsMax.X - GroupBoundsMin.X) / 8 + 1, (GroupBoundsMax.Y - GroupBoundsMin.Y) / 8 + 1);
+                        VirtualMap<char> virtualMap = new VirtualMap<char>(rectangle.Width, rectangle.Height, '0');
+                        foreach (List<NewAppearingBlock> agroup in Actualgroup)
+                        {
+                            foreach (NewAppearingBlock item in agroup)
+                            {
+                                int num = (int)(item.X / 8f) - rectangle.X;
+                                int num2 = (int)(item.Y / 8f) - rectangle.Y;
+                                int num3 = (int)(item.Width / 8f);
+                                int num4 = (int)(item.Height / 8f);
+                                for (int i = num; i < num + num3; i++)
+                                {
+                                    for (int j = num2; j < num2 + num4; j++)
+                                    {
+                                        virtualMap[i, j] = tileType;
+                                    }
+                                }
+                            }
+                        }
+
+                        tiles = GFX.FGAutotiler.GenerateMap(virtualMap, new Autotiler.Behaviour
+                        {
+                            EdgesExtend = false,
+                            EdgesIgnoreOutOfLevel = false,
+                            PaddingIgnoreOutOfLevel = false
+                        }).TileGrid;
+                        tiles.Position = new Vector2((float)GroupBoundsMin.X - base.X, (float)GroupBoundsMin.Y - base.Y);
+                        Add(tiles);
+                        if (nodes == count)
+                        {
+                            tiles.Alpha = 0;
+                            TargetAlpha = 1;
+                        }
+                        foreach (NewAppearingBlock item in group)
+                        {
+                            item.Collidable = true;
+                        }
+                    }
+
+                    if (Flag != "")
+                    {
+                        SceneAs<Level>().Session.SetFlag(Flag, OnFlag);
+                    }
+                }
+                Lastcount = nodes;
+            }
+            else
+            {
+                if (BlockedCheck<FinalBoss>(false) || BlockedCheck<FlagBadeline>(false))
+                {
+                    if (Flag != "")
+                    {
+                        SceneAs<Level>().Session.SetFlag(Flag, OnFlag);
+                    }
+                    GroupBoundsMin = new Point((int)base.X, (int)base.Y);
+                    GroupBoundsMax = new Point((int)base.Right, (int)base.Bottom);
+                    foreach (NewAppearingBlock i in group)
+                    {
+                        if (i.Y < GroupBoundsMin.Y) GroupBoundsMin.Y = (int)i.Y;
+                        if (i.X < GroupBoundsMin.X) GroupBoundsMin.X = (int)i.X;
+                        if (i.X + i.Width > GroupBoundsMax.X) GroupBoundsMax.X = (int)(i.X + i.Width);
+                        if (i.Y + i.Height > GroupBoundsMax.Y) GroupBoundsMax.Y = (int)(i.Y + i.Height);
+                    }
+                    Rectangle rectangle = new Rectangle(GroupBoundsMin.X / 8, GroupBoundsMin.Y / 8, (GroupBoundsMax.X - GroupBoundsMin.X) / 8 + 1, (GroupBoundsMax.Y - GroupBoundsMin.Y) / 8 + 1);
+                    VirtualMap<char> virtualMap = new VirtualMap<char>(rectangle.Width, rectangle.Height, '0');
+                    foreach (NewAppearingBlock item in group)
+                    {
+                        int num = (int)(item.X / 8f) - rectangle.X;
+                        int num2 = (int)(item.Y / 8f) - rectangle.Y;
+                        int num3 = (int)(item.Width / 8f);
+                        int num4 = (int)(item.Height / 8f);
+                        for (int i = num; i < num + num3; i++)
+                        {
+                            for (int j = num2; j < num2 + num4; j++)
+                            {
+                                virtualMap[i, j] = tileType;
+                            }
+                        }
+                    }
+
+                    tiles = GFX.FGAutotiler.GenerateMap(virtualMap, new Autotiler.Behaviour
+                    {
+                        EdgesExtend = false,
+                        EdgesIgnoreOutOfLevel = false,
+                        PaddingIgnoreOutOfLevel = false
+                    }).TileGrid;
+                    tiles.Position = new Vector2((float)GroupBoundsMin.X - base.X, (float)GroupBoundsMin.Y - base.Y);
+                    Add(tiles);
+                    tiles.Alpha = 0.5f;
+                    TargetAlpha = 1;
+                    foreach (NewAppearingBlock item in group)
+                    {
+                        item.Collidable = true;
+                    }
+                }
+            }
+        }
+
+
+        if (tiles != null)
         {
 
-            fade = sprite.Alpha != TargetAlpha;
+            fade = tiles.Alpha != TargetAlpha;
             //Logger.Log(LogLevel.Info, "neiw", fade.ToString());
             if (fade)
             {
@@ -116,12 +259,12 @@ public class NewAppearingBlock : Solid
                 //while (current != to)
                 //{
                 //CassetteBlock
-                sprite.Alpha = Calc.Approach(sprite.Alpha, TargetAlpha, Engine.DeltaTime);
+                tiles.Alpha = Calc.Approach(tiles.Alpha, TargetAlpha, Engine.DeltaTime);
                 StartShaking(Engine.DeltaTime);
-                if (sprite.Alpha == TargetAlpha)
+                if (tiles.Alpha == TargetAlpha)
                 {
                     fade = false;
-                    sprite.Position = Vector2.Zero;
+                    //tiles.Position = new Vector2((float)GroupBoundsMin.X - base.X, (float)GroupBoundsMin.Y - base.Y);
                 }
                 //sprite.Alpha = current;
                 //yield return null;
@@ -130,15 +273,31 @@ public class NewAppearingBlock : Solid
             }
             else
             {
-                sprite.Position = Vector2.Zero;
+                //tiles.Position = new Vector2((float)GroupBoundsMin.X - base.X, (float)GroupBoundsMin.Y - base.Y);
             }
         }
         base.Update();
     }
 
+    public bool GetNodeMatch(int target_node, out int current_node)
+    {
+        int node = -1;
+        foreach (var i in Scene.Entities.FindAll<FinalBoss>())
+        {
+            if (i.Active)
+            {
+                node = DynamicData.For(i).Get<int>("nodeIndex");
+                break;
+            }
+        }
+        current_node = node;
+        return node == -1? false : node == target_node;
+    }
+
+
     public override void Render()
     {
-        if (sprite != null && !fade) sprite.Position = Vector2.Zero;
+        if (tiles != null && !fade) tiles.Position = new Vector2((float)GroupBoundsMin.X - base.X, (float)GroupBoundsMin.Y - base.Y);
         base.Render();
     }
 
@@ -153,7 +312,7 @@ public class NewAppearingBlock : Solid
     public override void OnShake(Vector2 amount)
     {
         base.OnShake(amount);
-        if (fade) sprite.Position = amount;
+        if (fade) tiles.Position = new Vector2((float)GroupBoundsMin.X - base.X, (float)GroupBoundsMin.Y - base.Y) + amount;
     }
 
     public bool BlockedCheck(bool doShit = false)
@@ -173,6 +332,36 @@ public class NewAppearingBlock : Solid
         return false;
     }
 
+    public bool BlockedCheckAlt<T>(bool doShit = false) where T : FinalBoss
+    {
+        bool cl = Collidable;
+        List<T> disabled = new List<T>();
+        foreach (var i in Engine.Scene.Entities.FindAll<T>())
+        {
+            if (i.Collidable == false) disabled.Add(i);
+        }
+        foreach (var item in disabled)
+        {
+            item.Collidable = true;
+        }
+        Collidable = true;
+        T Tcollider = CollideFirst<T>();
+        if (Tcollider != null)
+        {
+            foreach (var item in disabled)
+            {
+                item.Collidable = false;
+            }
+            Collidable = cl;
+            return true;
+        }
+        foreach (var item in disabled)
+        {
+            item.Collidable = false;
+        }
+        Collidable = cl;
+        return false;
+    }
     public bool BlockedCheck<T>(bool doShit = false) where T : Entity
     {
         bool cl = Collidable;
@@ -224,8 +413,26 @@ public class NewAppearingBlock : Solid
 
 
     public bool MasterOfGroup;
+    public bool TrueMasterOfGroupEnd;
+    public bool TrueMasterOfGroup { get
+        {
+            return trueMasterOfGroup;
+        } 
+        set
+        {
+            if (!TrueMasterOfGroupEnd)
+            {
+                trueMasterOfGroup = value;
+                TrueMasterOfGroupEnd = true;
+            }
+        } 
+    }
+    private bool trueMasterOfGroup;
     public bool HasGroup;
+    public bool HasTrueGroup;
     public List<NewAppearingBlock> group;
+    public List<List<NewAppearingBlock>> Actualgroup;
+    public List<NewAppearingBlock> Truegroup;
     public Dictionary<Platform, Vector2> Moves;
 
     public TileGrid tiles;
@@ -233,7 +440,7 @@ public class NewAppearingBlock : Solid
     public Point GroupBoundsMin;
     public Point GroupBoundsMax;
 
-    public void FindInGroup(NewAppearingBlock block)
+    public void FindInGroup(NewAppearingBlock block, NewAppearingBlock orig)
     {
         block.HasGroup = true;
         //block.OnDashCollide = OnDash;
@@ -241,14 +448,67 @@ public class NewAppearingBlock : Solid
         Moves.Add(block, block.Position);
         foreach (NewAppearingBlock entity in base.Scene.Tracker.GetEntities<NewAppearingBlock>())
         {
-            if (entity != this && entity != block && ((entity.onNode && entity.DisappearMode == this.DisappearMode && entity.count == this.count)) && (entity.CollideRect(new Rectangle((int)block.X - 1, (int)block.Y, (int)block.Width + 2, (int)block.Height)) || entity.CollideRect(new Rectangle((int)block.X, (int)block.Y - 1, (int)block.Width, (int)block.Height + 2))) && !group.Contains(entity))
+            //if (entity != this && entity != block && entity != orig && ((entity.onNode == orig.onNode == true && entity.DisappearMode == orig.DisappearMode) || (entity.onNode == orig.onNode == false)) && (entity.CollideRect(new Rectangle((int)block.X - 1, (int)block.Y, (int)block.Width + 2, (int)block.Height)) || entity.CollideRect(new Rectangle((int)block.X, (int)block.Y - 1, (int)block.Width, (int)block.Height + 2))))
+            //{
+                //entity.TrueMasterOfGroupEnd = true;
+                //entity.TrueMasterOfGroup = false;
+            //}
+            if (entity != this && entity != block && ((entity.onNode && entity.DisappearMode == this.DisappearMode && (entity.count == this.count))) && (entity.CollideRect(new Rectangle((int)block.X - 1, (int)block.Y, (int)block.Width + 2, (int)block.Height)) || entity.CollideRect(new Rectangle((int)block.X, (int)block.Y - 1, (int)block.Width, (int)block.Height + 2))) && !group.Contains(entity))
             {
-                //group.Add(entity);
-                FindInGroup(entity);
+                group.Add(entity);
                 entity.group = group;
+                FindInGroup(entity, orig);
             }
         }
     }
+    public void FindInGroupTrueMaster(NewAppearingBlock block, NewAppearingBlock orig)
+    {
+        block.HasTrueGroup = true;
+        //block.OnDashCollide = OnDash;
+        Truegroup.Add(block);
+        //Moves.Add(block, block.Position);
+        foreach (NewAppearingBlock entity in base.Scene.Tracker.GetEntities<NewAppearingBlock>())
+        {
+            if (entity != this && entity != block && entity != orig && ((entity.onNode == orig.onNode == true && entity.DisappearMode == orig.DisappearMode) || (entity.onNode == orig.onNode == false)) && (entity.CollideRect(new Rectangle((int)block.X - 1, (int)block.Y, (int)block.Width + 2, (int)block.Height)) || entity.CollideRect(new Rectangle((int)block.X, (int)block.Y - 1, (int)block.Width, (int)block.Height + 2))) && !Truegroup.Contains(entity))
+            {
+                //entity.TrueMasterOfGroupEnd = true;
+                entity.TrueMasterOfGroup = false;
+                Truegroup.Add(entity);
+                entity.Truegroup = Truegroup;
+                orig.Truegroup = Truegroup;
+                FindInGroupTrueMaster(entity, orig);
+            }
+        }
+    }
+
+
+    public void FindInGroupDiffrent(NewAppearingBlock block, NewAppearingBlock orig)
+    {
+        block.HasGroup = true;
+        //block.OnDashCollide = OnDash;
+        orig.Actualgroup.Add(block.group);
+        //orig.Moves.TryAdd(block, block.Position);
+        foreach (NewAppearingBlock entity in orig.Truegroup)
+        {
+            if (entity != orig && ((entity.onNode && entity.DisappearMode == orig.DisappearMode && (entity.count <= orig.count))) && (entity.group != null && !orig.Actualgroup.Contains(entity.group)))
+            {
+                if (entity.tiles != null && entity != orig)
+                {
+                    entity.Depth = orig.Depth + 1;
+                    //entity.tiles.RemoveSelf();
+                }
+                /*if (entity.MasterOfGroup)
+                {
+                    entity.MasterOfGroup = false;
+                }*/
+                orig.Actualgroup.Add(entity.group);
+                entity.Actualgroup = orig.Actualgroup;
+                block.Actualgroup = orig.Actualgroup;
+                //FindInGroupDiffrent(entity, orig);
+            }
+        }
+    }
+
 
     public override void Awake(Scene scene)
     {
@@ -261,33 +521,59 @@ public class NewAppearingBlock : Solid
             //Jumpthrus = new List<JumpThru>();
             GroupBoundsMin = new Point((int)base.X, (int)base.Y);
             GroupBoundsMax = new Point((int)base.Right, (int)base.Bottom);
-            FindInGroup(this);
-            _ = base.Scene;
-            Rectangle rectangle = new Rectangle(GroupBoundsMin.X / 8, GroupBoundsMin.Y / 8, (GroupBoundsMax.X - GroupBoundsMin.X) / 8 + 1, (GroupBoundsMax.Y - GroupBoundsMin.Y) / 8 + 1);
-            VirtualMap<char> virtualMap = new VirtualMap<char>(rectangle.Width, rectangle.Height, '0');
-            foreach (NewAppearingBlock item in group)
+            TrueMasterOfGroup = true;
+            //TrueMasterOfGroupEnd = true;
+            if (!HasTrueGroup)
             {
-                int num = (int)(item.X / 8f) - rectangle.X;
-                int num2 = (int)(item.Y / 8f) - rectangle.Y;
-                int num3 = (int)(item.Width / 8f);
-                int num4 = (int)(item.Height / 8f);
-                for (int i = num; i < num + num3; i++)
+                Truegroup = new List<NewAppearingBlock>();
+                FindInGroupTrueMaster(this, this);
+            }
+            FindInGroup(this, this);
+            _ = base.Scene;
+            if (onNode && (count == 0 || DisappearMode))
+            {
+                foreach (NewAppearingBlock i in group)
                 {
-                    for (int j = num2; j < num2 + num4; j++)
+                    if (i.Y < GroupBoundsMin.Y) GroupBoundsMin.Y = (int)i.Y;
+                    if (i.X < GroupBoundsMin.X) GroupBoundsMin.X = (int)i.X;
+                    if (i.X + i.Width > GroupBoundsMax.X) GroupBoundsMax.X = (int)(i.X + i.Width);
+                    if (i.Y + i.Height > GroupBoundsMax.Y) GroupBoundsMax.Y = (int)(i.Y + i.Height);
+                }
+                Rectangle rectangle = new Rectangle(GroupBoundsMin.X / 8, GroupBoundsMin.Y / 8, (GroupBoundsMax.X - GroupBoundsMin.X) / 8 + 1, (GroupBoundsMax.Y - GroupBoundsMin.Y) / 8 + 1);
+                VirtualMap<char> virtualMap = new VirtualMap<char>(rectangle.Width, rectangle.Height, '0');
+                foreach (NewAppearingBlock item in group)
+                {
+                    int num = (int)(item.X / 8f) - rectangle.X;
+                    int num2 = (int)(item.Y / 8f) - rectangle.Y;
+                    int num3 = (int)(item.Width / 8f);
+                    int num4 = (int)(item.Height / 8f);
+                    for (int i = num; i < num + num3; i++)
                     {
-                        virtualMap[i, j] = tileType;
+                        for (int j = num2; j < num2 + num4; j++)
+                        {
+                            virtualMap[i, j] = tileType;
+                        }
                     }
                 }
-            }
 
-            tiles = GFX.FGAutotiler.GenerateMap(virtualMap, new Autotiler.Behaviour
+                tiles = GFX.FGAutotiler.GenerateMap(virtualMap, new Autotiler.Behaviour
+                {
+                    EdgesExtend = false,
+                    EdgesIgnoreOutOfLevel = false,
+                    PaddingIgnoreOutOfLevel = false
+                }).TileGrid;
+                tiles.Position = new Vector2((float)GroupBoundsMin.X - base.X, (float)GroupBoundsMin.Y - base.Y);
+                Add(tiles);
+                tiles.Alpha = 1.0f;
+                TargetAlpha = 1f;
+            }
+            else if (!onNode || (onNode && !DisappearMode))
             {
-                EdgesExtend = false,
-                EdgesIgnoreOutOfLevel = false,
-                PaddingIgnoreOutOfLevel = false
-            }).TileGrid;
-            tiles.Position = new Vector2((float)GroupBoundsMin.X - base.X, (float)GroupBoundsMin.Y - base.Y);
-            Add(tiles);
+                foreach (NewAppearingBlock item in group)
+                {
+                    item.Collidable = false;
+                }
+            }
         }
     }
 }
