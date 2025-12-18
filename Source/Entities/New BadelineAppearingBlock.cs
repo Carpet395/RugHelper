@@ -1,19 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.CompilerServices;
+using System.Linq;
 using Celeste.Mod.Entities;
-using Celeste;
 using Microsoft.Xna.Framework;
 using Monocle;
-using static Celeste.TrackSpinner;
-using FrostHelper.Entities.Boosters;
 using MonoMod.Utils;
-using System.Text.RegularExpressions;
-using Iced.Intel;
-using System.Diagnostics;
-using MonoMod.Core.Utils;
+
 
 namespace Celeste.Mod.Rug.Entities;
 
@@ -274,6 +267,10 @@ public class NewAppearingBlock : Solid
             else
             {
                 //tiles.Position = new Vector2((float)GroupBoundsMin.X - base.X, (float)GroupBoundsMin.Y - base.Y);
+            }
+            foreach (TileGrid i in Components.GetAll<TileGrid>().ToList<TileGrid>())
+            {
+                if (i != tiles) Remove(i);
             }
         }
         base.Update();
