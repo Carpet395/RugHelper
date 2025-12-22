@@ -6,7 +6,7 @@ using Monocle;
 
 namespace Celeste.Mod.Rug.Entities;
 
-[Tracked(false)]
+[TrackedAs(typeof(TheoCrystal))]
 [CustomEntity("Rug/TheoWOWOWOWOWOWOWOWOWOWOWOWOWFuckHimPutHimIntoLimbo")]
 public class TheoWOWOWOWOWOWOWOWOWOWOWOWOWFuckHimPutHimIntoLimbo : Actor
 {

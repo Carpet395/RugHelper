@@ -4,10 +4,12 @@ using Celeste.Mod.Entities;
 using CelesteMod.Publicizer;
 using Microsoft.Xna.Framework;
 using Monocle;
+using MonoMod.Utils;
 
 namespace Celeste.Mod.Rug.Entities;
 
 [CustomEntity("Rug/FlagSpinner")]
+[TrackedAs(typeof(CrystalStaticSpinner))]
 public class FlagCrystalStaticSpinner : Entity
 {
 
@@ -226,6 +228,10 @@ public class FlagCrystalStaticSpinner : Entity
         }
         else
         {
+            if (activeHmmm)
+            {
+                Destroyfx();
+            }
             Collidable = false;
             Visible = false;
             if (filler != null)
@@ -352,11 +358,15 @@ public class FlagCrystalStaticSpinner : Entity
         {
             Add(new Image(mTexture.GetSubtexture(0, 10, 14, 14)).SetOrigin(12f, 2f).SetColor(color));
         }
-        foreach (CrystalStaticSpinner entity in base.Scene.Tracker.GetEntities<CrystalStaticSpinner>())
+        foreach (CrystalStaticSpinner entity in base.Scene.Entities.FindAll<CrystalStaticSpinner>())
         {
             if (entity.AttachToSolid == AttachToSolid && entity.X >= base.X && (entity.Position - Position).Length() < 24f)
             {
                 AddSprite((Position + entity.Position) / 2f - Position);
+            }
+            else if (entity.AttachToSolid == AttachToSolid && entity.X < base.X && (entity.Position - Position).Length() < 24f)
+            {
+                DynamicData.For(entity).Invoke("AddSprite", (Position + entity.Position) / 2f - entity.Position);
             }
         }
         foreach (FlagCrystalStaticSpinner entity in base.Scene.Entities.FindAll<FlagCrystalStaticSpinner>())
@@ -486,6 +496,27 @@ public class FlagCrystalStaticSpinner : Entity
         }
         RemoveSelf();
     }
+    public void Destroyfx(bool boss = false)
+    {
+        if (InView())
+        {
+            Audio.Play("event:/game/06_reflection/fall_spike_smash", Position);
+            Color color = GetHue(Position);
+            if (this.color == CrystalColor.Red)
+            {
+                color = Calc.HexToColor("ff4f4f");
+            }
+            else if (this.color == CrystalColor.Blue)
+            {
+                color = Calc.HexToColor("639bff");
+            }
+            else if (this.color == CrystalColor.Purple)
+            {
+                color = Calc.HexToColor("ff4fef");
+            }
+            CrystalDebris.Burst(Position, color, boss, 8);
+        }
+    }
 
     private Color GetHue(Vector2 position)
     {
@@ -496,7 +527,7 @@ public class FlagCrystalStaticSpinner : Entity
     public string Flag = "";
     public Collider collider2;
 
-    public bool activeHmmm = true;
+    public bool activeHmmm = false;
     public bool needTo = true;
     public string color2 = "";
 

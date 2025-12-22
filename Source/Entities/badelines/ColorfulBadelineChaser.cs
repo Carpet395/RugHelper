@@ -6,7 +6,7 @@ using YamlDotNet.Core;
 namespace Celeste.Mod.Rug.Entities;
 
 [CustomEntity("Rug/ColorfulChaser")]
-[Tracked]
+[TrackedAs(typeof(BadelineOldsite))]
 public class ColorfulBadelineChaser : BadelineOldsite
 {
 

@@ -7,7 +7,7 @@ using Monocle;
 namespace Celeste.Mod.Rug.Entities;
 
 [CustomEntity("Rug/FlagBadeline")]
-[Tracked()]
+[TrackedAs(typeof(FinalBoss))]
 public class FlagBadeline : FinalBoss
 {
 
@@ -16,7 +16,6 @@ public class FlagBadeline : FinalBoss
     string flag;
     bool needTo;
 
-    //[MethodImpl(MethodImplOptions.NoInlining)]
     public FlagBadeline(Vector2 position, Vector2[] nodes, int patternIndex, float cameraYPastMax, bool dialog, bool startHit, bool cameraLockY, string flag, bool needTo)
     : base(position, nodes, patternIndex, cameraYPastMax, dialog, startHit, cameraLockY)
     {
@@ -60,7 +59,8 @@ public class FlagBadeline : FinalBoss
     public override void Update()
     {
         (Engine.Scene as Level).CameraLockMode = Level.CameraLockModes.None;
-        if ((Engine.Scene as Level).Session.GetFlag(flag) == needTo)
-            base.Update();
+        // this is bad and can cause stuff to break lol
+        //if ((Engine.Scene as Level).Session.GetFlag(flag) == needTo)
+        base.Update();
     }
 }

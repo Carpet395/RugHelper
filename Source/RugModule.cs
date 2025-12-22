@@ -438,13 +438,13 @@ public class RugHelperModule : EverestModule {
     public static Effect ApplyStandardParametersOverWorld(Effect effect, OuiChapterPanel self, Matrix? camera)
     {
         //var level = FrostModule.GetCurrentLevel() ?? throw new Exception("Not in a level when applying shader parameters! How did you...");
-        var parameters = effect.Parameters;
 
-        parameters["DeltaTime"]?.SetValue(Engine.DeltaTime);
-        parameters["Time"]?.SetValue(Engine.Scene.TimeActive);
-        parameters["Dimensions"]?.SetValue(new Vector2(1920, 1920));
-        parameters["CamPos"]?.SetValue(self.Overworld.Mountain.Camera.Position);
-        parameters["ColdCoreMode"]?.SetValue(true);
+
+        effect.Parameters["DeltaTime"]?.SetValue(Engine.DeltaTime);
+        effect.Parameters["Time"]?.SetValue(Engine.Scene.TimeActive);
+        effect.Parameters["Dimensions"]?.SetValue(new Vector2(1920, 1920));
+        effect.Parameters["CamPos"]?.SetValue(self.Overworld.Mountain.Camera.Position);
+        effect.Parameters["ColdCoreMode"]?.SetValue(true);
 
 
         Viewport viewport = Engine.Graphics.GraphicsDevice.Viewport;
@@ -455,11 +455,13 @@ public class RugHelperModule : EverestModule {
             ? Matrix.Identity
             : Matrix.CreateTranslation(-0.5f, -0.5f, 0f);
 
-        parameters["TransformMatrix"]?.SetValue(halfPixelOffset * projection);
+        effect.Parameters["TransformMatrix"]?.SetValue(halfPixelOffset * projection);
 
-        parameters["ViewMatrix"]?.SetValue(camera ?? Matrix.Identity);
-        parameters["Photosensitive"]?.SetValue(Settings.Instance.DisableFlashes);
-
+        effect.Parameters["ViewMatrix"]?.SetValue(camera ?? Matrix.Identity);
+        effect.Parameters["Photosensitive"]?.SetValue(Settings.Instance.DisableFlashes);
+        
+        //effect.Parameters = parameters;
+        
         return effect;
     }
 

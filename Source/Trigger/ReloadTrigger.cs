@@ -48,8 +48,6 @@ public class ReloadTrigger : Trigger
 
     public override void Update()
     {
-        Level level = Engine.Scene as Level;
-        Logger.Log(LogLevel.Info, "meow", level?.Tracker.GetEntity<Player>()?.Position.ToString());
         base.Update();
     }
 
@@ -58,17 +56,9 @@ public class ReloadTrigger : Trigger
     public override void OnEnter(Player player)
     {
         Level level = base.Scene as Level;
-
-        // Check if this trigger should only activate once and if it has already been triggered
-        //if (OnlyOnce && level.Session.GetFlag($"cutscene_trigger_{Event}"))
-        //{
-            //return;  // Skip if it has already been triggered and onlyOnce is true
-        //}
-
-        // Set the triggered flag and the session flag if OnlyOnce is true
-        if (triggered)
+        if (triggered && OnlyOnce)
         {
-            //return;
+            return;
         }
         triggered = true;
 
