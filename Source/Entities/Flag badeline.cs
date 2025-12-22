@@ -30,10 +30,9 @@ public class FlagBadeline : FinalBoss
 
     public override void Added(Scene scene)
     {
+        base.Added(scene);
         (scene as Level).CameraLockMode = Level.CameraLockModes.None;
-        if ((scene as Level).Session.GetFlag(flag) == needTo)
-            base.Added(scene);
-        else
+        if ((scene as Level).Session.GetFlag(flag) != needTo)
             base.RemoveSelf();
         //SceneAs<Level>().CameraLockMode = Level.CameraLockModes.None;
         //base.Added(scene);
@@ -41,10 +40,9 @@ public class FlagBadeline : FinalBoss
 
     public override void Awake(Scene scene)
     {
+        base.Awake(scene);
         (scene as Level).CameraLockMode = Level.CameraLockModes.None;
-        if ((scene as Level).Session.GetFlag(flag) == needTo)
-            base.Awake(scene);
-        else
+        if ((scene as Level).Session.GetFlag(flag) != needTo)
             base.RemoveSelf();
     }
 
