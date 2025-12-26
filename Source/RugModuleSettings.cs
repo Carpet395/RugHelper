@@ -15,9 +15,9 @@ namespace Celeste.Mod.Rug
     // modoptions_[typename without settings]_title
     // The value is then used to look up the UI text in the dialog files.
     // If no dialog text can be found, Everest shows a prettified mod name instead.
-    [SettingName("Partline")]
+    //[SettingName("Partline")]
     public class RugModuleSettings : EverestModuleSettings
     {
-        public bool ColorfulFieldTrip { get; set; } = false;
+        //public bool ColorfulFieldTrip { get; set; } = false;
     }
 }

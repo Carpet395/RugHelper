@@ -13,7 +13,7 @@ namespace Celeste.Mod.Rug.Entities;
 public class FlagCrystalStaticSpinner : Entity
 {
 
-    // -- to add later: option for it to shatter when disappearing -- //
+    // -- to add later: make it appear smoothly -- //
 
     private class CoreModeListener : Component
     {

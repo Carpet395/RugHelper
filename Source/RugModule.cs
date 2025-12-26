@@ -1,4 +1,5 @@
-﻿using System;
+﻿global using Celeste.Mod.Rug.Module;
+using System;
 //using Celeste.Mod.Rug.Entities;
 //using Celeste.Mod.Rug.Module;
 //using MonoMod.Core.Utils;
@@ -31,7 +32,7 @@ using static Celeste.Level;
 using Celeste.Mod.Rug.Entities;
 using IL.MonoMod;
 using Celeste.Mod.Entities;
-using FrostHelper;
+//using FrostHelper;
 //using Celeste.Mod.Meta;
 //using FrostHelper.ShaderImplementations;
 //using FrostHelper.ModIntegration;
@@ -47,6 +48,7 @@ public class RugHelperModule : EverestModule {
     // Only one alive module instance can exist at any given time.
     public static RugHelperModule Instance;
 
+    // a lot of shader work imported from frost helper, and changed for specific needs
     public static readonly FrameworkType Framework;
 
     static RugHelperModule()
@@ -61,14 +63,10 @@ public class RugHelperModule : EverestModule {
         Instance = this;
     }
 
-    // Check the next section for more information about mod settings, save data and session.
-    // Those are optional: if you don't need one of those, you can remove it from the module.
 
-    // If you need to store settings:
     public override Type SettingsType => typeof(RugModuleSettings);
     public static RugModuleSettings RugSettings => (RugModuleSettings)Instance._Settings;
 
-    // If you need to store save data:
     public override Type SaveDataType => typeof(RugModuleSaveData);
     public static RugModuleSaveData SaveDat => (RugModuleSaveData)Instance._SaveData;
 
@@ -89,6 +87,7 @@ public class RugHelperModule : EverestModule {
         On.Celeste.AreaData.Load += AreaDataOnLoad;
         Everest.Content.OnUpdate += Content_OnUpdate;
         On.Celeste.Level.EnforceBounds += EnforceBounds;
+        //On.Celeste.FinalBoss.TriggerFallingBlocks += TriggerFallingBlocks;
         TheoWOWOWOWOWOWOWOWOWOWOWOWOWFuckHimPutHimIntoLimbo.P_Impact = new ParticleType
         {
             Color = Calc.HexToColor("cbdbfc"),
@@ -103,6 +102,43 @@ public class RugHelperModule : EverestModule {
         };
         //gradientShader = GFX.LoadFx("test");
         //hook_OuiChapterSelect_get_area = new LegacyHook(typeof(OuiChapterSelect).GetProperty("area", BindingFlags.Instance | BindingFlags.NonPublic).GetGetMethod(nonPublic: true), typeof(RugHelperModule).GetMethod("OnChapterSelectGetArea", BindingFlags.Static | BindingFlags.NonPublic));
+    }
+
+
+
+
+    private void TriggerFallingBlocks(On.Celeste.FinalBoss.orig_TriggerFallingBlocks orig, FinalBoss self, float leftOfX)
+    {
+        orig(self, leftOfX);
+        /*while (self.fallingBlocks.Count > 0 && fallingBlocks[0].Scene == null)
+        {
+            self.fallingBlocks.RemoveAt(0);
+        }
+        int num = 0;
+        while (fallingBlocks.Count > 0 && fallingBlocks[0].X < leftOfX)
+        {
+            FallingBlock obj = fallingBlocks[0] as FallingBlock;
+            obj.StartShaking();
+            obj.Triggered = true;
+            obj.FallDelay = 0.4f * (float)num;
+            num++;
+            fallingBlocks.RemoveAt(0);
+        }*/
+        List<RugFallingBlock> fallingBlocks = Engine.Scene.Entities.FindAll<RugFallingBlock>();
+        while (fallingBlocks.Count > 0 && fallingBlocks[0].Scene == null)
+        {
+            fallingBlocks.RemoveAt(0);
+        }
+        int num = 0;
+        while (fallingBlocks.Count > 0 && fallingBlocks[0].X < leftOfX)
+        {
+            RugFallingBlock obj = fallingBlocks[0] as RugFallingBlock;
+            obj.StartShaking();
+            obj.Triggered = true;
+            obj.FallDelay = 0.4f * (float)num;
+            num++;
+            fallingBlocks.RemoveAt(0);
+        }
     }
 
     public static void EnforceBounds(On.Celeste.Level.orig_EnforceBounds orig, Level self, Player player)
@@ -292,6 +328,8 @@ public class RugHelperModule : EverestModule {
         //Everest.Events.Player.OnSpawn -= onPlayerSpawn;
         On.Celeste.OuiChapterPanel.Render -= OuiChapterPanel_RenderHook;
         On.Celeste.AreaData.Load -= AreaDataOnLoad;
+
+        //On.Celeste.FinalBoss.TriggerFallingBlocks -= TriggerFallingBlocks;
         // On.Celeste.Dialog.Get -= DialogOnGet;
         //On.Celeste.Dialog.Clean -= DialogOnClean;
 
@@ -1035,6 +1073,12 @@ public class GameplayHudRenderer : Renderer
         cursor.EmitCall(typeof(BitTag).GetMethod("op_Implicit")!);
         cursor.EmitOr();
     }
+}
+
+public enum FrameworkType
+{
+    FNA,
+    XNA
 }
 
 
